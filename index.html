@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Verchema's Project 5 Submission</title>
     <link rel="stylesheet" href="css/style.css">
     <script type='text/javascript' src='knockout/knockout-3.3.0.js'></script>
@@ -10,29 +12,42 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl1LNQtfMg_F6axChl90ySZeW5z9yyqlo">
     </script>
 
-    
-     <style type="text/css">
-      html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
-    </style>
-   
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
    
 </head>
 <body>
+ 
+<div class="container">
 
-    <div id="map-canvas"></div>
-    
-    <div>
-            <h3>Fun Places to Also Visit:</h3>
-             <ul data-bind="foreach: {data: places, as: 'place'}">
-                <li data-bind="text: place.name"></li>
-            </ul>
-    </div>  
-    
+      <div class="page-header">
+        <h1>Neighborhood Map Near San Diego's Grand Del Mar Resort</h1>
+        <p class="lead">Project 5 Submitted by Verchema Flood</p>
+      </div>
+  
+     
+    <h3>Fun Places to Also Visit:</h3>
+      <p></p>
+      <div class="row">
+         <div class="col-xs-6 col-lg-4"> <ul data-bind="foreach: {data: places, as: 'place'}">
+                  <li data-bind="text: place.name"></li>
+              </ul></div>
+        <div class="col-xs-12 col-sm-6 col-lg-8" id="map-container"><div id="map-canvas"></div></div>
+       
+      </div>
+             
+     
+       
+      </div>
+     
+         
 
 
     
 
     <script src="js/libs/jquery.min.js"></script>
     <script src="js/script.js"></script>
+     </div> <!-- /container -->
 </body>
 </html>
