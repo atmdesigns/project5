@@ -1,7 +1,7 @@
 
 // Model
 // My data consists of the location I'd like to visit plus two attractions
-var theHotel = new google.maps.LatLng(32.940,-117.197);
+
 
 
 
