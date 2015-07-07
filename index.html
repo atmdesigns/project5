@@ -23,8 +23,8 @@
     
     <div>
             <h3>Fun Places to Also Visit:</h3>
-            <ul data-bind="foreach: currentPlace().funPlaces">
-                <li data-bind="text: $data"></li>
+             <ul data-bind="foreach: {data: places, as: 'place'}">
+                <li data-bind="text: place.name"></li>
             </ul>
     </div>  
     
