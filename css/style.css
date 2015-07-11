@@ -28,15 +28,12 @@ hr {
 }
 /* End grid css */
 
-#map-container {
-    position:relative;
-    height:60%;
-}
 
-#map-container #map-canvas { 
+
+#map-canvas { 
     position: absolute; 
-    height: 100%; !important;
-    width:100%; !important;
+    height: 80%; !important;
+    width:80%; !important;
     top:0;
     right:0;
     margin: 0; 
