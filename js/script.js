@@ -1,12 +1,6 @@
 
 // Model
 // My data consists of the location I'd like to visit plus two attractions
-<<<<<<< HEAD
-
-||||||| merged common ancestors
-var theHotel = new google.maps.LatLng(32.940,-117.197);
-=======
->>>>>>> bootstrap
 
 var infowindow = new google.maps.InfoWindow();
 
@@ -17,8 +11,7 @@ var places = ko.observableArray ([
             mylat: 32.736,
             mylong: -117.149,
             mycontent: 'Zoo Info Here',
-            show: ko.observable(true),
-            id: "place1"
+            show: ko.observable(true)
             
             
         },
@@ -27,18 +20,19 @@ var places = ko.observableArray ([
             mylat: 33.126,
             mylong: -117.309,
             mycontent: 'Lego Info Here',
-            show: ko.observable(true),
-            id: "place2"
+            show: ko.observable(true)
         },
         {
             name: "Grand Del Mar Resort",
             mylat: 32.940,
             mylong: -117.197,
             mycontent: 'Grand Info Here',
-            show: ko.observable(true),
-            id: "place3"
+            show: ko.observable(true)
         }
         ]);
+
+
+  
 
 
 //View
@@ -79,11 +73,11 @@ var ViewModel = function() {
             mapOptions);
 
   currmarker.setMap(mymap);
-  addMarkers(mymap, places);
+   // addMarkers(places);
 
  } 
 
-function addMarkers(map, locations){
+function addMarkers(locations){
 //Create markers for each interesting place and add to map
   
   
@@ -97,17 +91,15 @@ function addMarkers(map, locations){
         });  //close marker creation
       
       currmarker = locations()[i].marker;
-      var currcontent = locations()[i].mycontent;
 
       //Create info window for each location
       locations()[i].infowindow = new google.maps.InfoWindow({
         content: locations()[i].mycontent,
         });  //close info window creation
       //Create event listener for each location
-      console.log(infowindow,currcontent);
+      console.log(infowindow,currmarker);
       google.maps.event.addListener(currmarker, 'click', function() {
         
-      infowindow.setContent(currcontent);
       infowindow.open(map,currmarker);
     
   });
