@@ -11,7 +11,8 @@ var places = ko.observableArray ([
             mylat: 32.736,
             mylong: -117.149,
             mycontent: 'Zoo Info Here',
-            show: ko.observable(true)
+            show: ko.observable(true),
+            id: "place1"
             
             
         },
@@ -20,19 +21,18 @@ var places = ko.observableArray ([
             mylat: 33.126,
             mylong: -117.309,
             mycontent: 'Lego Info Here',
-            show: ko.observable(true)
+            show: ko.observable(true),
+            id: "place2"
         },
         {
             name: "Grand Del Mar Resort",
             mylat: 32.940,
             mylong: -117.197,
             mycontent: 'Grand Info Here',
-            show: ko.observable(true)
+            show: ko.observable(true),
+            id: "place3"
         }
         ]);
-
-
-  
 
 
 //View
@@ -73,11 +73,11 @@ var ViewModel = function() {
             mapOptions);
 
   currmarker.setMap(mymap);
-   // addMarkers(places);
+  addMarkers(mymap, places);
 
  } 
 
-function addMarkers(locations){
+function addMarkers(map, locations){
 //Create markers for each interesting place and add to map
   
   
@@ -91,15 +91,17 @@ function addMarkers(locations){
         });  //close marker creation
       
       currmarker = locations()[i].marker;
+      var currcontent = locations()[i].mycontent;
 
       //Create info window for each location
       locations()[i].infowindow = new google.maps.InfoWindow({
         content: locations()[i].mycontent,
         });  //close info window creation
       //Create event listener for each location
-      console.log(infowindow,currmarker);
+      console.log(infowindow,currcontent);
       google.maps.event.addListener(currmarker, 'click', function() {
         
+      infowindow.setContent(currcontent);
       infowindow.open(map,currmarker);
     
   });
