@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Verchema's Project 5 Submission</title>
     <link rel="stylesheet" href="css/style.css">
     <script type='text/javascript' src='knockout/knockout-3.3.0.js'></script>
     
+<<<<<<< HEAD
     <!-- Google Maps API with key -->
       <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl1LNQtfMg_F6axChl90ySZeW5z9yyqlo"></script>
@@ -25,23 +28,82 @@
       html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
     </style> 
    
+||||||| merged common ancestors
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl1LNQtfMg_F6axChl90ySZeW5z9yyqlo">
+    </script>
+
+    
+     <style type="text/css">
+      html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+    </style>
+   
+=======
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl1LNQtfMg_F6axChl90ySZeW5z9yyqlo">
+    </script> 
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<style>
+  html {height: 100%}
+  body {height: 100%;}
+  #map-container { height:100%}
+  #map-outer {height:500px;
+              padding:20px;
+              border:2px solid #ccc;
+              margin-bottom: 20px;
+              background-color: #fff}
+  @media all and (max-width: 991px) {
+    #map-outer {height:650px}
+  }            
+</style>
+
+>>>>>>> bootstrap
    
 </head>
 <body>
+ 
+<!--<input id="searchBar" placeholder="Search" type="search" data-bind="textInput: searchPlaces"> -->
+<div class="container">
+  <div class="page-header">
+        <h2>Neighborhood Map Near San Diego's Grand Del Mar Resort</h2>
+        <p class="lead">Project 5 Submitted by Verchema Flood</p>
+      </div>
 
-    <div id="map-canvas"></div>
-    
-    <div>
-            <h3>Fun Places to Also Visit:</h3>
-             <ul data-bind="foreach: {data: places, as: 'place'}">
-                <li data-bind="text: place.name"></li>
-            </ul>
-    </div>  
-    
+  <div class="row">
+    <div id="map-outer" class="col-md-12">
+      <div class="col-xs-6 col-lg-4"> 
+          <ul data-bind="foreach: {data: places, as: 'place'}">
+              <li data-bind="text: place.name"></li>
+          </ul>
 
+      </div>
+      <div id="map-container" class="col-xs-12 col-sm-6 col-lg-8"></div> 
+    </div> <!--close map-outer-->
+  </div> <!-- close row -->
+ 
+<!--<div data-bind="foreach: {data: places, as: 'place'}">
+    <button data-bind = "text: 'Show/hide ' +place.name, click: $parent.hidePlace"></button> 
+-->
 
+<<<<<<< HEAD
        <script src="js/script.js"></script>
 
     
+||||||| merged common ancestors
+    
+
+    <script src="js/libs/jquery.min.js"></script>
+    <script src="js/script.js"></script>
+=======
+         
+</div> <!-- /container -->
+<script src="js/libs/jquery.min.js"></script>
+    <script src="js/script.js"></script>
+>>>>>>> bootstrap
 </body>
 </html>
