@@ -11,7 +11,8 @@ var places = ko.observableArray ([
             mylat: 32.736,
             mylong: -117.149,
             mycontent: 'Zoo Info Here',
-            show: ko.observable(true)
+            show: ko.observable(true),
+            id: "place1"
             
             
         },
@@ -20,19 +21,18 @@ var places = ko.observableArray ([
             mylat: 33.126,
             mylong: -117.309,
             mycontent: 'Lego Info Here',
-            show: ko.observable(true)
+            show: ko.observable(true),
+            id: "place2"
         },
         {
             name: "Grand Del Mar Resort",
             mylat: 32.940,
             mylong: -117.197,
             mycontent: 'Grand Info Here',
-            show: ko.observable(true)
+            show: ko.observable(true),
+            id: "place3"
         }
         ]);
-
-
-  
 
 
 //View
@@ -73,16 +73,17 @@ var ViewModel = function() {
             mapOptions);
 
   currmarker.setMap(mymap);
-   // addMarkers(places);
+  addMarkers(mymap, places);
 
  } 
 
-function addMarkers(locations){
+function addMarkers(map, locations){
 //Create markers for each interesting place and add to map
   
   
   for (i=0 ; i < locations().length; i++) {
-     
+
+
       //Create marker for each location
       locations()[i].marker = new google.maps.Marker({
         position: new google.maps.LatLng(locations()[i].mylat, locations()[i].mylong),
@@ -90,21 +91,28 @@ function addMarkers(locations){
         title: locations()[i].name,
         });  //close marker creation
       
+      //This is the current place marker
       currmarker = locations()[i].marker;
+      var currcontent = locations()[i].mycontent;
 
       //Create info window for each location
       locations()[i].infowindow = new google.maps.InfoWindow({
         content: locations()[i].mycontent,
         });  //close info window creation
+      
       //Create event listener for each location
-      console.log(infowindow,currmarker);
-      google.maps.event.addListener(currmarker, 'click', function() {
+      
+      google.maps.event.addListener(currmarker, 'click', (function(places, i) {
+        return function() {
         
-      infowindow.open(map,currmarker);
+          infowindow.setContent(places[i].mycontent);
+          infowindow.open(map,currmarker);
+          console.log(currcontent);
+        };  
     
-  });
+      })(currmarker,i));
 
-  }
+  } //end for loop
 }
 
  // var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
