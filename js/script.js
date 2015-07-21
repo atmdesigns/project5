@@ -2,8 +2,14 @@
 // Model
 // My data consists of the location I'd like to visit plus two attractions
 
+var theHotel = new google.maps.LatLng(32.940,-117.197);  
 var infowindow = new google.maps.InfoWindow();
-
+var mapOptions = {
+          center: theHotel,
+          zoom: 10
+    };
+var map = new google.maps.Map(document.getElementById("map-container"),
+            mapOptions);
 
 var places = ko.observableArray ([
         {
@@ -56,34 +62,26 @@ var ViewModel = function() {
 
 
  function initialize() {
-    var theHotel = new google.maps.LatLng(32.940,-117.197);       
+         
 
-    var mapOptions = {
-          center: theHotel,
-          zoom: 10
-    };
+    
 
     var currmarker = new google.maps.Marker({
         position: theHotel,
-        map: mymap,
+        map: map,
         title: "The Hotel"
         });  //close marker creation;
 
-  var mymap = new google.maps.Map(document.getElementById("map-container"),
-            mapOptions);
+  
 
-  currmarker.setMap(mymap);
-  addMarkers(mymap, places);
+  currmarker.setMap(map);
+  addMarkers(places);
 
  } 
 
-function addMarkers(map, locations){
+function addMarkers(locations){
 //Create markers for each interesting place and add to map
-  
-  
   for (i=0 ; i < locations().length; i++) {
-
-
       //Create marker for each location
       locations()[i].marker = new google.maps.Marker({
         position: new google.maps.LatLng(locations()[i].mylat, locations()[i].mylong),
@@ -91,32 +89,17 @@ function addMarkers(map, locations){
         title: locations()[i].name,
         });  //close marker creation
       
-      //This is the current place marker
-      currmarker = locations()[i].marker;
-      var currcontent = locations()[i].mycontent;
+      var content = locations()[i].name; 
+      var infowindow = new google.maps.InfoWindow();
 
-      //Create info window for each location
-      locations()[i].infowindow = new google.maps.InfoWindow({
-        content: locations()[i].mycontent,
-        });  //close info window creation
-      
-      //Create event listener for each location
-      
-      google.maps.event.addListener(currmarker, 'click', (function(places, i) {
+      google.maps.event.addListener(locations()[i].marker ,'click', (function(marker,content,infowindow){
         return function() {
-        
-          infowindow.setContent(places[i].mycontent);
-          infowindow.open(map,currmarker);
-          console.log(currcontent);
-        };  
-    
-      })(currmarker,i));
-
+            infowindow.setContent(content);
+            infowindow.open(map,marker);
+        };
+      })(locations()[i].marker, content, infowindow));
   } //end for loop
 }
-
- // var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
- 
 
 google.maps.event.addDomListener(window, 'load', initialize);
 var viewModel = new ViewModel();
