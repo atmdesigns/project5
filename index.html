@@ -29,38 +29,29 @@
   @media all and (max-width: 991px) {
     #map-outer {height:650px}
   }            
-</style>
-
-   
+</style> 
 </head>
+
 <body>
- 
 <div class="container">
   <div class="page-header">
         <h2>Neighborhood Map Near San Diego's Grand Del Mar Resort</h2>
         <p class="lead">Project 5 Submitted by Verchema Flood</p>
       </div>
   
-  <input id="searchBar" placeholder="Search" type="search" data-bind="textInput: searchPlaces"> 
+  <!-- Implement search functionality -->
+  <input id="searchBar" placeholder="Search" type="search" data-bind="textInput: query, valueUpdate: 'keyup'"> </input>
   
   <div class="row">
     <div id="map-outer" class="col-md-12">
-     
-      <div class="col-xs-6 col-lg-4"> 
-          <ul data-bind="foreach: {data: places, as: 'place'}">
-              <li data-bind="text: place.name"></li>
-          </ul>
-
-      </div>
-      <div id="map-container" class="col-xs-12 col-sm-6 col-lg-8"></div> 
+        <div class="col-xs-6 col-lg-4"> 
+            <ul data-bind="foreach: search()">
+              <li data-bind="text: name"></li>
+            </ul>
+        </div>
+        <div id="map-container" class="col-xs-12 col-sm-6 col-lg-8"></div> 
     </div> <!--close map-outer-->
   </div> <!-- close row -->
- 
-<!--<div data-bind="foreach: {data: places, as: 'place'}">
-    <button data-bind = "text: 'Show/hide ' +place.name, click: $parent.hidePlace"></button> 
--->
-
-         
 </div> <!-- /container -->
 
  <script src="js/script.js"></script>  

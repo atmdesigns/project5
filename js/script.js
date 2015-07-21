@@ -19,8 +19,6 @@ var places = ko.observableArray ([
             mycontent: 'Zoo Info Here',
             show: ko.observable(true),
             id: "place1"
-            
-            
         },
         {
             name: "Legoland",
@@ -45,39 +43,33 @@ var places = ko.observableArray ([
 
 
 
-
 //ViewModel
 var ViewModel = function() {
   var self=this;
 
-  self.searchPlaces = ko.observable();
+  self.points = ko.observableArray(places());
 
-  self.hidePlace = function() {
-    var currentShow = this.show();
-    this.show(!currentShow);
+  self.query = ko.observable('');
 
-  }
-    
-}
-
-
- function initialize() {
-         
-
+  self.search = ko.computed(function(){
+    return ko.utils.arrayFilter(self.points(), function(point){
+    return point.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
+    });
+  });
+};
     
 
-    var currmarker = new google.maps.Marker({
-        position: theHotel,
-        map: map,
-        title: "The Hotel"
-        });  //close marker creation;
-
-  
+function initialize() {
+      
+  var currmarker = new google.maps.Marker({
+      position: theHotel,
+      map: map,
+      title: "The Hotel"
+      });  //close marker creation;
 
   currmarker.setMap(map);
   addMarkers(places);
-
- } 
+} 
 
 function addMarkers(locations){
 //Create markers for each interesting place and add to map
