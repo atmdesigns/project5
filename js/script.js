@@ -1,7 +1,7 @@
 
 // Model
 // My data consists of the location I'd like to visit plus two attractions
-
+var $wikiElem = $('#wikipedia-links');
 var theHotel = new google.maps.LatLng(32.940,-117.197);  
 var infowindow = new google.maps.InfoWindow();
 var mapOptions = {
@@ -21,7 +21,7 @@ var places = ko.observableArray ([
             id: "place1"
         },
         {
-            name: "Legoland",
+            name: "Legoland San Diego",
             mylat: 33.126,
             mylong: -117.309,
             mycontent: 'Lego Info Here',
@@ -29,7 +29,7 @@ var places = ko.observableArray ([
             id: "place2"
         },
         {
-            name: "Grand Del Mar Resort",
+            name: "San Diego Grand Del Mar Resort",
             mylat: 32.940,
             mylong: -117.197,
             mycontent: 'Grand Info Here',
@@ -37,8 +37,8 @@ var places = ko.observableArray ([
             id: "place3"
         }
         ]);
-
-
+ // clear out old data before new request
+    $wikiElem.text("");
 //View
 
 
@@ -56,7 +56,34 @@ var ViewModel = function() {
     return point.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
     });
   });
-};
+  var theResort = "San Diego Grand Del Mar Resort";
+  var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + theResort + 
+                            '&format=json&callback=wikiCallback';
+
+  this.getWikis = ko.computed(function() {
+    //get Wiki articles       
+      var wikiRequestTimeout = setTimeout(function() {
+                                        $wikiElem.text("failed to get wikipedia resources");
+                                        },8000);
+                $.ajax({
+                    url: wikiUrl,
+                    dataType: "jsonp",
+                    //jsonp: "callback",
+                    success: function ( response) {
+                        var articleList = response[1];
+
+                        for (var i=0; i < articleList.length; i++) {
+                            articleStr = articleList[i];
+                            var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+                            $wikiElem.append('<li><a href="' + url + '">' +
+                                articleStr + '</a></li>'); 
+                        };
+                        clearTimeout(wikiRequestTimeout);
+                      }
+                  });   
+    });
+};  //end ViewModel
+
     
 
 function initialize() {
@@ -69,6 +96,7 @@ function initialize() {
 
   currmarker.setMap(map);
   addMarkers(places);
+  this.getWikis();
 } 
 
 function addMarkers(locations){
@@ -92,6 +120,7 @@ function addMarkers(locations){
       })(locations()[i].marker, content, infowindow));
   } //end for loop
 }
+
 
 google.maps.event.addDomListener(window, 'load', initialize);
 var viewModel = new ViewModel();
