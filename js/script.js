@@ -2,7 +2,7 @@
 // Model
 // My data consists of the location I'd like to visit plus two attractions
 var $wikiElem = $('#wikipedia-links');
-var theHotel = new google.maps.LatLng(32.940,-117.197);  
+var theHotel = new google.maps.LatLng(32.940,-117.197);
 var infowindow = new google.maps.InfoWindow();
 var mapOptions = {
           center: theHotel,
@@ -16,7 +16,7 @@ var places = ko.observableArray ([
             name: "San Diego Zoo",
             mylat: 32.736,
             mylong: -117.149,
-            mycontent: 'Zoo Info Here',
+            mycontent: 'This is one of the best zoos in the country!',
             show: ko.observable(true),
             id: "place1"
         },
@@ -24,7 +24,7 @@ var places = ko.observableArray ([
             name: "Legoland San Diego",
             mylat: 33.126,
             mylong: -117.309,
-            mycontent: 'Lego Info Here',
+            mycontent: 'This is an excellent place to take the family!',
             show: ko.observable(true),
             id: "place2"
         },
@@ -32,16 +32,13 @@ var places = ko.observableArray ([
             name: "San Diego Grand Del Mar Resort",
             mylat: 32.940,
             mylong: -117.197,
-            mycontent: 'Grand Info Here',
+            mycontent: 'Five stars.  Need I say more?',
             show: ko.observable(true),
             id: "place3"
         }
         ]);
- // clear out old data before new request
+// clear out old data before new request
     $wikiElem.text("");
-//View
-
-
 
 //ViewModel
 var ViewModel = function() {
@@ -56,12 +53,14 @@ var ViewModel = function() {
     return point.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
     });
   });
-  var theResort = "San Diego Grand Del Mar Resort";
-  var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + theResort + 
-                            '&format=json&callback=wikiCallback';
+  
 
-  this.getWikis = ko.computed(function() {
-    //get Wiki articles       
+  self.getWikis = function(content) {
+    //get Wiki articles
+      var theResort = "Del mar resort";
+      var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + theResort  + 
+                            '&format=json&callback=wikiCallback';
+      console.log(wikiUrl);
       var wikiRequestTimeout = setTimeout(function() {
                                         $wikiElem.text("failed to get wikipedia resources");
                                         },8000);
@@ -70,21 +69,20 @@ var ViewModel = function() {
                     dataType: "jsonp",
                     //jsonp: "callback",
                     success: function ( response) {
-                        var articleList = response[1];
+                        var articleList = response[0];
 
                         for (var i=0; i < articleList.length; i++) {
-                            articleStr = articleList[i];
+                            articleStr = articleList;
                             var url = 'http://en.wikipedia.org/wiki/' + articleStr;
                             $wikiElem.append('<li><a href="' + url + '">' +
                                 articleStr + '</a></li>'); 
-                        };
+                            articleList = response[i];
+                        }
                         clearTimeout(wikiRequestTimeout);
                       }
-                  });   
-    });
+                  });
+  };
 };  //end ViewModel
-
-    
 
 function initialize() {
       
@@ -96,10 +94,15 @@ function initialize() {
 
   currmarker.setMap(map);
   addMarkers(places);
-  this.getWikis();
 } 
 
 function addMarkers(locations){
+google.maps.event.addListener(map, 'click', function() {
+  infowindow.close();
+});
+
+var infowindow = new google.maps.InfoWindow();
+
 //Create markers for each interesting place and add to map
   for (i=0 ; i < locations().length; i++) {
       //Create marker for each location
@@ -110,18 +113,19 @@ function addMarkers(locations){
         });  //close marker creation
       
       var content = locations()[i].name; 
-      var infowindow = new google.maps.InfoWindow();
+      
 
       google.maps.event.addListener(locations()[i].marker ,'click', (function(marker,content,infowindow){
         return function() {
             infowindow.setContent(content);
             infowindow.open(map,marker);
+            //Get Wikipedia articles when marker is clicked
+            viewModel.getWikis(content);
         };
       })(locations()[i].marker, content, infowindow));
   } //end for loop
 }
-
-
-google.maps.event.addDomListener(window, 'load', initialize);
 var viewModel = new ViewModel();
-ko.applyBindings(new ViewModel())
+ko.applyBindings(new ViewModel());
+google.maps.event.addDomListener(window, 'load', initialize);
+

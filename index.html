@@ -3,12 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Verchema's Project 5 Submission</title>
     <link rel="stylesheet" href="css/style.css">
     <script type='text/javascript' src='knockout/knockout-3.3.0.js'></script>
      <script src="js/libs/jquery.min.js"></script>
-    <script type="text/javascript"
+    <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl1LNQtfMg_F6axChl90ySZeW5z9yyqlo">
     </script> 
 
@@ -21,11 +21,13 @@
   html {height: 100%}
   body {height: 100%;}
   #map-container { height:100%}
-  #map-outer {height:500px;
-              padding:20px;
-              border:2px solid #ccc;
-              margin-bottom: 20px;
-              background-color: #fff}
+  #map-outer {
+        height:500px;
+        padding:20px;
+        border:2px solid #ccc;
+        margin-bottom: 20px;
+        background-color: #fff
+      }
   @media all and (max-width: 991px) {
     #map-outer {height:650px}
   }            
@@ -37,10 +39,10 @@
   <div class="page-header">
         <h2>Neighborhood Map Near San Diego's Grand Del Mar Resort</h2>
         <p class="lead">Project 5 Submitted by Verchema Flood</p>
-      </div>
+  </div>
   
   <!-- Implement search functionality -->
-  <input id="searchBar" placeholder="Search" type="search" data-bind="textInput: query, valueUpdate: 'keyup'"> </input>
+  <input id="searchBar" placeholder="Search" type="search" data-bind="textInput: query, valueUpdate: 'keyup'">
   
   <div class="row">
     <div id="map-outer" class="col-md-12">
@@ -56,7 +58,7 @@
   <div class="wikipedia-container">
         <h3 id="wikipedia-header">Relevant Wikipedia Links</h3>
         <div id="wikipedia-links">
-            <h3 data-bind="click: getWikis">San Diego, CA </h3>
+            <h3 data-bind="click: getWikis"></h3>
         </div>
     </div>
 </div> <!-- /container -->
