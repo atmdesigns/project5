@@ -35,6 +35,22 @@ var places = ko.observableArray ([
             mycontent: 'Five stars.  Need I say more?',
             show: ko.observable(true),
             id: "place3"
+        },
+        {
+            name: "La Jolla Playhouse",
+            mylat: 32.871,
+            mylong: -117.241,
+            mycontent: 'No idea yet',
+            show: ko.observable(true),
+            id: "place4"
+        },
+        {
+            name: "Museum of Contemporary Art San Diego",
+            mylat: 32.717,
+            mylong: -117.169,
+            mycontent: 'Yay art!',
+            show: ko.observable(true),
+            id: "place5"
         }
         ]);
 // clear out old data before new request
@@ -49,9 +65,16 @@ var ViewModel = function() {
   self.query = ko.observable('');
 
   self.search = ko.computed(function(){
-    return ko.utils.arrayFilter(self.points(), function(point){
-    return point.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
-    });
+   
+    var filter = self.query().toLowerCase();
+       
+    if (!filter) {
+      // self.showOrHideMarkers(map);
+      return self.points();
+    } else {
+        return ko.utils.arrayFilter(self.points(), function(point) {
+       return point.name.toLowerCase().indexOf(filter) >= 0;
+    })}
   });
   
 
@@ -119,6 +142,12 @@ var infowindow = new google.maps.InfoWindow();
         return function() {
             infowindow.setContent(content);
             infowindow.open(map,marker);
+            
+            //add marker animation
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function() { marker.setAnimation(null); }, 750);
+            
+
             //Get Wikipedia articles when marker is clicked
             viewModel.getWikis(content);
         };
