@@ -1,5 +1,9 @@
-* {box-sizing:border-box;}
-body {background-color: #CCC;}
+* {
+  box-sizing:border-box;
+}
+body {
+  background-color: #ccc;
+}
 
 /* Grid CSS */
 h4 {
@@ -13,6 +17,7 @@ h4 {
   margin-top: 10px;
   margin-bottom: 0;
 }
+
 [class*="col-"] {
   padding-top: 15px;
   padding-bottom: 15px;
@@ -30,13 +35,12 @@ hr {
 
 #map-canvas { 
     position: absolute; 
-    height: 80%; !important;
-    width:80%; !important;
+    height: 80%; 
+    width:80%; 
     top:0;
     right:0;
     margin: 0; 
-    padding: 0; 
-    
+    padding: 0;    
 }
 
 #searchBar {
@@ -57,7 +61,7 @@ hr {
 .article {
     list-style-type: none;
     padding:10px;
-    border-top: 1px solid #CCC;
+    border-top: 1px solid #ccc;
 }
 
 .article:first-child {
