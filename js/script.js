@@ -62,24 +62,24 @@ var ViewModel = function() {
 
    
   // Encapsulate markers to allow interaction with Google Maps
-  var Pin = function Pin(map, name, mylat, mylon, mycontent) {
+  var Pin = function (map, name, mylat, mylong, mycontent) {
 
     var marker;
 
-  self.name = ko.observable(name);
-  self.lat  = ko.observable(mylat);
-  self.lon  = ko.observable(mylon);
-  self.mycontent = ko.observable(mycontent);
+  this.name = ko.observable(name);
+  this.lat  = ko.observable(mylat);
+  this.lon  = ko.observable(mylong);
+  this.mycontent = ko.observable(mycontent);
 
   marker = new google.maps.Marker({
-    position: new google.maps.LatLng(mylat, mylon),
+    position: new google.maps.LatLng(mylat, mylong),
     animation: google.maps.Animation.DROP,
 
   });
 
-  self.show = ko.observable(false);
+  this.show = ko.observable(false);
 
-  self.show.subscribe(function(currentState) {
+  this.show.subscribe(function(currentState) {
     if (currentState) {
       marker.setMap(map);
     } else {
@@ -87,7 +87,8 @@ var ViewModel = function() {
     }
   });
 
-  self.show(true);
+  this.show(true);
+  this.marker = marker;
 }  //close addMarkers
 
   // Add markers
@@ -95,20 +96,18 @@ var ViewModel = function() {
   infowindow.close();
   });
 
-  var infowindow = new google.maps.InfoWindow();
-
-
+  
   for (i=0 ; i < places().length; i++) {
       //Create marker for each location
       places()[i].pin =  new Pin (map, places()[i].name, places()[i].mylat, places()[i].mylong, places()[i].mycontent);
 
-      var content = places()[i].pin.name;
+      var content = places()[i].pin.name();
 
-      google.maps.event.addListener(places()[i].pin ,'click', (function(pin,content,infowindow){
+      google.maps.event.addListener(places()[i].pin.marker ,'click', (function(pin,content,infowindow){
        
         return function() {
             infowindow.setContent(content);
-            infowindow.open(map,pin);
+            infowindow.open(map,pin.marker);
          
       //viewModel.getWikis(content);
       };
