@@ -156,15 +156,13 @@ var ViewModel = function() {
                     dataType: "jsonp",
                     //jsonp: "callback",
                     success: function ( response) {
-                        var articleList = response[0];
-
-                        for (var i=0; i < articleList.length; i++) {
-                            articleStr = articleList;
-                            var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+                        var articleStr = response[0];                  
+                        var url = 'http://en.wikipedia.org/wiki/' + articleStr;
                             $wikiElem.append('<li><a href="' + url + '">' +
                                 articleStr + '</a></li>'); 
-                            articleList = response[i];
-                        }
+                            
+                        console.log(wikiUrl);
+                        
                         clearTimeout(wikiRequestTimeout);
                       }
                   });
