@@ -17,7 +17,7 @@ var places = ko.observableArray ([
             mylat: 32.736,
             mylong: -117.149,
             mycontent: 'This is one of the best zoos in the country!',
-            show: ko.observable(true),
+            isVisible: ko.observable(true),
             id: "place1"
         },
         {
@@ -25,15 +25,15 @@ var places = ko.observableArray ([
             mylat: 33.126,
             mylong: -117.309,
             mycontent: 'This is an excellent place to take the family!',
-            show: ko.observable(true),
+            isVisible: ko.observable(true),
             id: "place2"
         },
         {
             name: "San Diego Grand Del Mar Resort",
             mylat: 32.940,
             mylong: -117.197,
-            mycontent: 'Five stars.  Need I say more?',
-            show: ko.observable(true),
+            mycontent: '<div id="wikipedia-links"></div>',
+            isVisible: ko.observable(true),
             id: "place3"
         },
         {
@@ -41,7 +41,7 @@ var places = ko.observableArray ([
             mylat: 32.871,
             mylong: -117.241,
             mycontent: 'No idea yet',
-            show: ko.observable(true),
+            isVisible: ko.observable(true),
             id: "place4"
         },
         {
@@ -49,7 +49,7 @@ var places = ko.observableArray ([
             mylat: 32.717,
             mylong: -117.169,
             mycontent: 'Yay art!',
-            show: ko.observable(true),
+            isVisible: ko.observable(true),
             id: "place5"
         }
         ]);
@@ -77,17 +77,18 @@ var ViewModel = function() {
 
   });
 
-  this.show = ko.observable(false);
-
-  this.show.subscribe(function(currentState) {
-    if (currentState) {
+  this.isVisible = ko.observable(false);
+  
+  this.isVisible.subscribe(function(isVisible) {
+    
+    if (isVisible) {
       marker.setMap(map);
     } else {
       marker.setMap(null);
     }
   });
 
-  this.show(true);
+  this.isVisible(true);
   this.marker = marker;
 }  //close addMarkers
 
@@ -107,9 +108,8 @@ var ViewModel = function() {
        
         return function() {
             infowindow.setContent(content);
-            infowindow.open(map,pin.marker);
-         
-      //viewModel.getWikis(content);
+            infowindow.open(map,pin.marker); 
+      viewModel.getWikis(content);
       };
       })(places()[i].pin, content, infowindow));
   }  //close marker creation loop
@@ -125,16 +125,18 @@ var ViewModel = function() {
     return ko.utils.arrayFilter(self.locations(), function(location) {
        
        var showPin = location.name.toLowerCase().indexOf(filter) >= 0;
-       
-       if (location) {      
+
+       if (location) {       
           if (showPin) {
-            location.show(true);
+            
+            location.isVisible(true);
           }
           else {
-          location.show(false);
+          
+          location.isVisible(false);
+          
           }
        }
-        
        return showPin;
     });
   }); // close filter and search
@@ -142,10 +144,10 @@ var ViewModel = function() {
 
   self.getWikis = function(content) {
     //get Wiki articles
-      var theResort = "Del mar resort";
-      var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + theResort  + 
+      var thePlace = content;
+      var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + thePlace  + 
                             '&format=json&callback=wikiCallback';
-      console.log(wikiUrl);
+      
       var wikiRequestTimeout = setTimeout(function() {
                                         $wikiElem.text("failed to get wikipedia resources");
                                         },8000);
