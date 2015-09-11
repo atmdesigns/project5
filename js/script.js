@@ -108,6 +108,7 @@ var ViewModel = function() {
       google.maps.event.addListener(places()[i].pin.marker ,'click', (function(pin,content,infowindow, heading){
        
         return function() {
+            
             viewModel.getWikis(content, infowindow);
             infowindow.setContent('<h4>' + heading + '</h4>' + content);
             infowindow.open(map,pin.marker); 
@@ -115,6 +116,10 @@ var ViewModel = function() {
       };
       })(places()[i].pin, content, infowindow, heading));
   }  //close marker creation loop
+
+
+
+
 
   // Filter and search
   self.locations = ko.observableArray(places());
@@ -154,6 +159,8 @@ var ViewModel = function() {
       var wikiRequestTimeout = setTimeout(function() {
                                         $wikiElem.text("failed to get wikipedia resources");
                                         },8000);
+             
+
                 $.ajax({
                     url: wikiUrl,
                     dataType: "jsonp",
@@ -165,7 +172,7 @@ var ViewModel = function() {
                                 articleStr + '</a></li>');    
                         
                          mycontent = $wikiElem;
-                        
+                         console.log(mycontent);
                         clearTimeout(wikiRequestTimeout);
                       }
                      
