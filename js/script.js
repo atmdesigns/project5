@@ -16,7 +16,7 @@ var places = ko.observableArray ([
             name: "San Diego Zoo",
             mylat: 32.736,
             mylong: -117.149,
-            mycontent: 'This is one of the best zoos in the country!',
+            mycontent: '',
             isVisible: ko.observable(true),
             id: "place1"
         },
@@ -24,7 +24,7 @@ var places = ko.observableArray ([
             name: "Legoland San Diego",
             mylat: 33.126,
             mylong: -117.309,
-            mycontent: 'This is an excellent place to take the family!',
+            mycontent: '',
             isVisible: ko.observable(true),
             id: "place2"
         },
@@ -40,7 +40,7 @@ var places = ko.observableArray ([
             name: "La Jolla Playhouse",
             mylat: 32.871,
             mylong: -117.241,
-            mycontent: 'No idea yet',
+            mycontent: '',
             isVisible: ko.observable(true),
             id: "place4"
         },
@@ -48,7 +48,7 @@ var places = ko.observableArray ([
             name: "Museum of Contemporary Art San Diego",
             mylat: 32.717,
             mylong: -117.169,
-            mycontent: 'Yay art!',
+            mycontent: '',
             isVisible: ko.observable(true),
             id: "place5"
         }
@@ -102,16 +102,18 @@ var ViewModel = function() {
       //Create marker for each location
       places()[i].pin =  new Pin (map, places()[i].name, places()[i].mylat, places()[i].mylong, places()[i].mycontent);
 
-      var content = places()[i].pin.name();
+      var content = places()[i].pin.mycontent();
+      var heading = places()[i].pin.name();
 
-      google.maps.event.addListener(places()[i].pin.marker ,'click', (function(pin,content,infowindow){
+      google.maps.event.addListener(places()[i].pin.marker ,'click', (function(pin,content,infowindow, heading){
        
         return function() {
-            infowindow.setContent(content);
+            viewModel.getWikis(content, infowindow);
+            infowindow.setContent('<h4>' + heading + '</h4>' + content);
             infowindow.open(map,pin.marker); 
-      viewModel.getWikis(content);
+                  
       };
-      })(places()[i].pin, content, infowindow));
+      })(places()[i].pin, content, infowindow, heading));
   }  //close marker creation loop
 
   // Filter and search
@@ -142,12 +144,13 @@ var ViewModel = function() {
   }); // close filter and search
 
 
-  self.getWikis = function(content) {
+  self.getWikis = function(mycontent, infowindow) {
     //get Wiki articles
       var thePlace = content;
       var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + thePlace  + 
                             '&format=json&callback=wikiCallback';
       
+     
       var wikiRequestTimeout = setTimeout(function() {
                                         $wikiElem.text("failed to get wikipedia resources");
                                         },8000);
@@ -159,12 +162,13 @@ var ViewModel = function() {
                         var articleStr = response[0];                  
                         var url = 'http://en.wikipedia.org/wiki/' + articleStr;
                             $wikiElem.append('<li><a href="' + url + '">' +
-                                articleStr + '</a></li>'); 
-                            
-                        console.log(wikiUrl);
+                                articleStr + '</a></li>');    
+                        
+                         mycontent = $wikiElem;
                         
                         clearTimeout(wikiRequestTimeout);
                       }
+                     
                   });
   };
 };  //end ViewModel
