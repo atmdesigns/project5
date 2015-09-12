@@ -1,7 +1,7 @@
 
 // Model
 // My data consists of the location I'd like to visit plus two attractions
-var $wikiElem = $('#wikipedia-links');
+
 var theHotel = new google.maps.LatLng(32.940,-117.197);
 var infowindow = new google.maps.InfoWindow();
 var mapOptions = {
@@ -17,7 +17,7 @@ var places = ko.observableArray ([
             mylat: 32.736,
             mylong: -117.149,
             mycontent: '',
-            isVisible: ko.observable(true),
+            //isVisible: ko.observable(false),
             id: "place1"
         },
         {
@@ -25,15 +25,15 @@ var places = ko.observableArray ([
             mylat: 33.126,
             mylong: -117.309,
             mycontent: '',
-            isVisible: ko.observable(true),
+            //isVisible: ko.observable(false),
             id: "place2"
         },
         {
             name: "San Diego Grand Del Mar Resort",
             mylat: 32.940,
             mylong: -117.197,
-            mycontent: '<div id="wikipedia-links"></div>',
-            isVisible: ko.observable(true),
+            mycontent: '',
+            //isVisible: ko.observable(false),
             id: "place3"
         },
         {
@@ -41,7 +41,7 @@ var places = ko.observableArray ([
             mylat: 32.871,
             mylong: -117.241,
             mycontent: '',
-            isVisible: ko.observable(true),
+            //isVisible: ko.observable(false),
             id: "place4"
         },
         {
@@ -49,17 +49,14 @@ var places = ko.observableArray ([
             mylat: 32.717,
             mylong: -117.169,
             mycontent: '',
-            isVisible: ko.observable(true),
+            //isVisible: ko.observable(false),
             id: "place5"
         }
         ]);
-// clear out old data before new request
-    $wikiElem.text("");
 
 //ViewModel
 var ViewModel = function() {
   var self=this;
-
    
   // Encapsulate markers to allow interaction with Google Maps
   var Pin = function (map, name, mylat, mylong, mycontent) {
@@ -79,13 +76,18 @@ var ViewModel = function() {
 
   this.isVisible = ko.observable(false);
   
-  this.isVisible.subscribe(function(isVisible) {
-    
-    if (isVisible) {
-      marker.setMap(map);
-    } else {
+  this.isVisible.subscribe(function(isFiltered) {
+    console.log(isFiltered);
+     
+    if (isFiltered) {
+      
       marker.setMap(null);
+    } 
+    else {
+      marker.setMap(map);
     }
+     
+    
   });
 
   this.isVisible(true);
@@ -109,17 +111,13 @@ var ViewModel = function() {
        
         return function() {
             
-            viewModel.getWikis(content, infowindow);
-            infowindow.setContent('<h4>' + heading + '</h4>' + content);
+            viewModel.getWikis(heading, infowindow);
+                      
             infowindow.open(map,pin.marker); 
                   
       };
       })(places()[i].pin, content, infowindow, heading));
   }  //close marker creation loop
-
-
-
-
 
   // Filter and search
   self.locations = ko.observableArray(places());
@@ -131,60 +129,56 @@ var ViewModel = function() {
 
     return ko.utils.arrayFilter(self.locations(), function(location) {
        
-       var showPin = location.name.toLowerCase().indexOf(filter) >= 0;
+       var isFiltered = location.name.toLowerCase().indexOf(filter) >= 0;
 
-       if (location) {       
-          if (showPin) {
-            
-            location.isVisible(true);
+      if (location) {
+          if (isFiltered) {
+            location.pin.isVisible(true);
+
           }
           else {
           
-          location.isVisible(false);
+            location.pin.isVisible(false);
+
           
           }
-       }
-       return showPin;
+        }
+       return isFiltered;
     });
   }); // close filter and search
 
 
-  self.getWikis = function(mycontent, infowindow) {
+  self.getWikis = function(heading, infowindow) {
     //get Wiki articles
-      var thePlace = content;
-      var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + thePlace  + 
-                            '&format=json&callback=wikiCallback';
-      
+      var thePlace = heading;
+      var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + thePlace  +
+                            '&format=json&callback=wikiCallback'; 
      
       var wikiRequestTimeout = setTimeout(function() {
                                         $wikiElem.text("failed to get wikipedia resources");
                                         },8000);
              
-
                 $.ajax({
                     url: wikiUrl,
                     dataType: "jsonp",
                     //jsonp: "callback",
                     success: function ( response) {
-                        var articleStr = response[0];                  
+                        var articleStr = response[0];           
                         var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-                            $wikiElem.append('<li><a href="' + url + '">' +
-                                articleStr + '</a></li>');    
-                        
-                         mycontent = $wikiElem;
-                         console.log(mycontent);
+                         
+                        content = url;
+                        infowindow.setContent('<h4>' + heading + '</h4>' + '<a href="' + content + '">' + 'Wikipedia Link to ' +
+                                heading + '</a>');
+                       
                         clearTimeout(wikiRequestTimeout);
                       }
-                     
-                  });
-  };
+                }); //end ajax request
+  };//end getWikis
 };  //end ViewModel
 
 function initialize() {
-      
   
-  
-} 
+}
 
 
 var viewModel = new ViewModel();
