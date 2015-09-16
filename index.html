@@ -48,19 +48,12 @@
     <div id="map-outer" class="col-md-12">
         <div class="col-xs-6 col-lg-4"> 
             <ul data-bind="foreach: search()">
-              <li data-bind="text: name"></li>
+             <li> <a data-bind="click: viewModel.getWikis, attr: {href: name}"></a></li>
             </ul>
         </div>
         <div id="map-container" class="col-xs-12 col-sm-6 col-lg-8"></div> 
     </div> <!--close map-outer-->
   </div> <!-- close row -->
-  
-  <div class="wikipedia-container">
-        <h3 id="wikipedia-header">Relevant Wikipedia Links</h3>
-        <div>
-            <h3 data-bind="click: getWikis"></h3>
-        </div>
-    </div>
 </div> <!-- /container -->
 
  <script src="js/script.js"></script>  
