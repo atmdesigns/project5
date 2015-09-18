@@ -9,10 +9,16 @@ body {
 h4 {
   margin-top: 25px;
 }
+
+li {
+  cursor: pointer;
+  color: blue;
+}
+
 .row {
   margin-bottom: 20px;
-
 }
+
 .row .row {
   margin-top: 10px;
   margin-bottom: 0;
@@ -47,23 +53,3 @@ hr {
   margin-bottom: 20px;
 }
 
-.wikipedia-container {
-    padding:0px;
-    margin-right: 300px;
-    background-color: rgba(255,255,255,0.7);
-}
-
-.article-list {
-    margin: 0;
-    padding: 0;
-}
-
-.article {
-    list-style-type: none;
-    padding:10px;
-    border-top: 1px solid #ccc;
-}
-
-.article:first-child {
-    border-top:none;
-}
